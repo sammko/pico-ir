@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "pico-ir-api/target": true,
+        "**/.jj": true,
+    }
+}

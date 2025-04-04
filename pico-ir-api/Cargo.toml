@@ -1,0 +1,16 @@
+[package]
+name = "pico-ir-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.97"
+backon = "1.4.1"
+listenfd = "1.0.2"
+poem = "3.1.8"
+serde = "1.0.219"
+tokio = { version = "1.44.1", features = ["full"] }
+tokio-serial = "5.4.5"
+tokio-util = "0.7.14"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"

@@ -1,0 +1,19 @@
+[project]
+name = "infrared"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "adafruit-circuitpython-irremote>=5.0.3",
+    "adafruit-circuitpython-typing>=1.11.2",
+]
+
+[tool.pyright]
+reportShadowedImports = "off"
+typeCheckingMode = "off"
+
+[dependency-groups]
+dev = [
+    "circup>=2.2.0",
+]
