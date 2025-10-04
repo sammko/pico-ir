@@ -1,0 +1,9 @@
+[package]
+name = "pico-ir-mqtt"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.100"
+rumqttc = "0.25.0"
+serialport = "4.7.3"
