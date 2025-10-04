@@ -6,4 +6,4 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.100"
 rumqttc = "0.25.0"
-serialport = "4.7.3"
+serialport = { version = "4.7.3", default-features = false }
