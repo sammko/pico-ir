@@ -1,7 +1,20 @@
 use ::std::str::{self, FromStr};
 
 use ::anyhow::{Context, anyhow, bail};
+use ::bpaf::{Bpaf, Parser};
 use ::rumqttc as mq;
+
+#[derive(Clone, Debug, Bpaf)]
+struct CmdArgs {
+    #[bpaf(short('h'), long)]
+    mqtt_host: String,
+    #[bpaf(short('u'), long)]
+    mqtt_user: String,
+    #[bpaf(env("MQTT_PASSWORD"))]
+    mqtt_password: String,
+    #[bpaf(short('s'))]
+    serial_port: String,
+}
 
 #[derive(Clone, Copy, Debug)]
 enum InfraredCommand {
@@ -68,16 +81,18 @@ impl TryFrom<mq::Publish> for InfraredCommand {
 }
 
 fn main() -> ::anyhow::Result<()> {
-    let mut serial = ::serialport::new("/dev/serial/by-id/usb-Jabu_Infrared_1-if00", 115200)
+    let args = cmd_args().run();
+    let mut serial = ::serialport::new(args.serial_port, 115200)
         .open()
         .context("serialport failed")?;
     let opts = {
-        let mut opts = mq::MqttOptions::new("pico-ir-mqtt", "jabu.elver-vibe.ts.net", 1883);
-        opts.set_credentials("pico-ir", "jozefjozef");
+        let mut opts = mq::MqttOptions::new("pico-ir-mqtt", args.mqtt_host, 1883);
+        opts.set_credentials(args.mqtt_user, args.mqtt_password);
         opts
     };
     let (client, mut conn) = mq::Client::new(opts, 10);
     client.subscribe("jabu/pico-ir/#", mq::QoS::AtMostOnce)?;
+    println!("We're on");
     for ev in conn.iter() {
         let ev = ev.context("got connection error")?;
         let rumqttc::Event::Incoming(mq::Packet::Publish(msg)) = ev else {
